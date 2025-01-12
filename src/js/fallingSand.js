@@ -5,6 +5,7 @@ class FallingSandSimulation{
         this.context = context;
         this.sandSize = 10;
         this.tickRate = 25;
+        this.brushSize = 2;
         this.sandBox = [];
 
         /* event listeners on canvas for mouse down and move to toggle cells */
@@ -152,8 +153,13 @@ class FallingSandSimulation{
         const col = Math.floor((mouseX * (this.canvas.width / rect.width)) / this.sandSize);
         const row = Math.floor((mouseY * (this.canvas.height / rect.height)) / this.sandSize);
     
-        console.log("Adding sand")
-        this.sandBox[row][col] = 1;
+        let brush = Math.ceil(this.brushSize/2);
+        for (let i = -brush; i <= brush; i++) {
+            for (let j = -brush; j <= brush; j++) {
+                this.sandBox[row + i][col + j] = 1;
+            }
+        }
+
         this.drawGrid();
 
         // Start simulation if it's not already running
