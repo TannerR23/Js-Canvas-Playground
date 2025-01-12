@@ -5,7 +5,7 @@ class FallingSandSimulation{
         this.context = context;
         this.sandSize = 10;
         this.tickRate = 25;
-        this.sand = [];
+        this.sandBox = [];
 
         /* event listeners on canvas for mouse down and move to toggle cells */
         this.canvas.addEventListener("mousedown", this.addSand.bind(this));
@@ -23,14 +23,15 @@ class FallingSandSimulation{
     }
 
     initialiseSand(){
-        this.sand = [];
+        this.sandBox = [];
+        this.isSimulating = false;
     
         for (let row = 0; row < this.canvas.height / this.sandSize; row++) {
             let currRow = [];
             for (let col = 0; col < this.canvas.width / this.sandSize; col++) {
                 currRow.push(0);
             }
-            this.sand.push(currRow);
+            this.sandBox.push(currRow);
         }
     
         this.drawGrid();
@@ -44,14 +45,14 @@ class FallingSandSimulation{
         this.context.strokeStyle = "black";
         this.context.fillStyle = "black";
     
-        for (let row = 0; row < this.sand.length; row++) {
-            for (let col = 0; col < this.sand[row].length; col++) {
+        for (let row = 0; row < this.sandBox.length; row++) {
+            for (let col = 0; col < this.sandBox[row].length; col++) {
                 let x = col * this.sandSize;
                 let y = row * this.sandSize;
     
                 this.context.strokeRect(x, y, this.sandSize, this.sandSize);
 
-                if(this.sand[row][col] === 1){
+                if(this.sandBox[row][col] === 1){
                     this.context.fillRect(x, y, this.sandSize, this.sandSize);
                 }
             }
@@ -64,9 +65,7 @@ class FallingSandSimulation{
     /*
     *   Function to simulate sand falling
     */
-    simulate(){
-        this.isSimulating = true;
-    
+    simulate(){    
         //Clear any existing interval to avoid multiple simulations
         if (this.simulationInterval){
             clearInterval(this.simulationInterval);
@@ -84,10 +83,39 @@ class FallingSandSimulation{
     }
 
     calcNextSandPositions(){
+        let newSandBox = [];
 
+        //Initialise new sandBox
+        for (let row = 0; row < this.canvas.height / this.sandSize; row++) {
+            let currRow = [];
+            for (let col = 0; col < this.canvas.width / this.sandSize; col++) {
+                currRow.push(0);
+            }
+            newSandBox.push(currRow);
+        }
+
+        for (let row = 0; row < this.sandBox.length; row++) {
+            for (let col = 0; col < this.sandBox[row].length; col++) {
+                if (this.sandBox[row][col] === 1) {
+                    // Sand stays in same pos if at bottom of grid or there is sand below
+                    if (row + 1 >= this.sandBox.length || this.sandBox[row + 1][col] === 1) {
+                        newSandBox[row][col] = 1;
+                    } 
+                    // Sand falls to the next row if empty
+                    else if (this.sandBox[row + 1][col] === 0) {
+                        newSandBox[row + 1][col] = 1;
+                    } 
+                }
+            }
+        }
+
+        this.sandBox = newSandBox;
+        this.drawGrid();
     }
 
     addSand(){
+        this.isSimulating = true;
+
         //Check we are still holding the mouse down
         if (event.type === "mousedown") {
             this.isCanvasMouseDown = true;
@@ -103,7 +131,7 @@ class FallingSandSimulation{
         const row = Math.floor((mouseY * (this.canvas.height / rect.height)) / this.sandSize);
     
         console.log("Adding sand")
-        this.sand[row][col] = 1;
+        this.sandBox[row][col] = 1;
         this.drawGrid();
     }
 }
