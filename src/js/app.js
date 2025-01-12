@@ -19,30 +19,29 @@ function onclickConwaysGame(){
     container.appendChild(title);
 
     //Canvas setup
-    let canvas = document.createElement("canvas");
-    canvas.id = "conways-game"
-    canvas.width = container.getBoundingClientRect().width;
-    canvas.height = 500;
-    container.appendChild(canvas);
+    let canvas = createCanvas("conways-game")
+    let context = getContext(canvas);
+
+    const conwaysGame = new ConwaysGame(container, canvas, context);
 
     let btnContainer = document.createElement("div");
     btnContainer.className = "btn-container";
 
     let clearBtn = document.createElement("button");
     clearBtn.innerText = "Clear";
-    clearBtn.onclick = clearConwaysGame;
+    clearBtn.onclick = conwaysGame.clearConwaysGame.bind(conwaysGame);
     let randomGameBtn = document.createElement("button");
     randomGameBtn.innerText = "Random Game";
-    randomGameBtn.onclick = randomConwayGame;
+    randomGameBtn.onclick = conwaysGame.randomConwayGame.bind(conwaysGame);
     let simulateBtn = document.createElement("button");
     simulateBtn.innerText = "Simulate";
-    simulateBtn.onclick = simulateConwaysGame;
+    simulateBtn.onclick = conwaysGame.simulateConwaysGame.bind(conwaysGame);
     let stopBtn = document.createElement("button");
     stopBtn.innerText = "Stop";
-    stopBtn.onclick = stopConwaysGame;
+    stopBtn.onclick = conwaysGame.stopConwaysGame.bind(conwaysGame);
     let stepThroughBtn = document.createElement("button");
     stepThroughBtn.innerText = "Step Through";
-    stepThroughBtn.onclick = calcNextGeneration;
+    stepThroughBtn.onclick = conwaysGame.calcNextGeneration.bind(conwaysGame);
 
     btnContainer.appendChild(clearBtn);
     btnContainer.appendChild(randomGameBtn);
@@ -52,5 +51,42 @@ function onclickConwaysGame(){
     container.appendChild(btnContainer);
 
     //Create a random game
-    initialisation();
+    conwaysGame.randomConwayGame();
+}
+
+function onclickFallingSand(){
+    clearPage();
+
+    //title setup
+    let title = document.createElement("h1");
+    title.innerHTML = "Falling Sand Simulation";
+    container.appendChild(title);
+
+    //Canvas setup
+    let canvas = document.createElement("canvas");
+    canvas.id = "sand-simulation-canvas"
+    canvas.width = container.getBoundingClientRect().width;
+    canvas.height = 500;
+    container.appendChild(canvas);
+
+    fallingSandInitialisation();
+}
+
+/*
+*   Function to create a canvas given optional arguments of classname, width and height
+*/
+function createCanvas(canvasClassName = null, width = null, height = null){
+    canvas = document.createElement("canvas");
+    if(canvasClassName){
+        canvas.id = canvasClassName;
+    }
+    canvas.width = width || container.getBoundingClientRect().width;
+    canvas.height = height || 500;
+    container.appendChild(canvas);
+
+    return canvas
+}
+
+function getContext(canvas){
+    return canvas.getContext("2d");
 }

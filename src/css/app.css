@@ -65,7 +65,7 @@ canvas{
     border: 1px solid black;
 }
 
-#conways-game{
+#conways-game, #sand-simulation-canvas{
     cursor: pointer;
 }
 
