@@ -80,13 +80,6 @@ function randomConwayGame(){
 }
 
 /* 
-    Function to set flag to stop the simulation
-*/
-function stopSimulation(){
-    isSimulating = false;
-}
-
-/* 
     Function to continously simulate conways game at a certain tick rate
 */
 function simulateConwaysGame(){
@@ -165,8 +158,11 @@ function countNeighbours(row, col){
     return numNeighbours
 }
 
+/* 
+    Function to set flag to stop the simulation
+*/
 function stopConwaysGame(){
-    console.log("Clearing conways game");
+    isSimulating = false;
 }
 
 function stepThroughConwaysGame(){
