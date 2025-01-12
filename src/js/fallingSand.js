@@ -57,9 +57,6 @@ class FallingSandSimulation{
                 }
             }
         }
-
-        //call to start simulating
-        this.simulate();
     }
 
     /*
@@ -133,5 +130,10 @@ class FallingSandSimulation{
         console.log("Adding sand")
         this.sandBox[row][col] = 1;
         this.drawGrid();
+
+        // Start simulation if it's not already running
+        if (!this.simulationInterval) {
+            this.simulate();
+        }
     }
 }
