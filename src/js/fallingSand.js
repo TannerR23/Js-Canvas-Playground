@@ -24,7 +24,7 @@ class FallingSandSimulation{
 
     initialiseSand(){
         this.sandBox = [];
-        this.isSimulating = false;
+
     
         for (let row = 0; row < this.canvas.height / this.sandSize; row++) {
             let currRow = [];
