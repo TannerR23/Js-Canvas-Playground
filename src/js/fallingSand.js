@@ -93,11 +93,36 @@ class FallingSandSimulation{
 
         for (let row = 0; row < this.sandBox.length; row++) {
             for (let col = 0; col < this.sandBox[row].length; col++) {
+                let canFallLeft = true;
+                let canFallRight = true;
+                if(col+1 >= this.sandBox[row].length){
+                    canFallRight = false;
+                }
+                
+                if(col-1 < 0){
+                    canFallLeft = false;
+                }
+
                 if (this.sandBox[row][col] === 1) {
-                    // Sand stays in same pos if at bottom of grid or there is sand below
-                    if (row + 1 >= this.sandBox.length || this.sandBox[row + 1][col] === 1) {
+                    // Sand stays in same pos if at bottom of grid
+                    if (row + 1 >= this.sandBox.length) {
                         newSandBox[row][col] = 1;
-                    } 
+                    }
+                    else if(this.sandBox[row + 1][col] === 1){
+                        if(canFallLeft && canFallRight && this.sandBox[row + 1][col - 1] === 0 && this.sandBox[row + 1][col + 1] === 0){
+                            const randomDir = Math.random() < 0.5 ? -1 : 1;
+                            newSandBox[row + 1][col + randomDir] = 1;
+                        }
+                        else if(canFallLeft && this.sandBox[row + 1][col - 1] === 0){
+                            newSandBox[row + 1][col - 1] = 1;
+                        }
+                        else if(canFallRight && this.sandBox[row + 1][col + 1] === 0){
+                            newSandBox[row + 1][col + 1] = 1;
+                        }
+                        else{
+                            newSandBox[row][col] = 1;
+                        }
+                    }
                     // Sand falls to the next row if empty
                     else if (this.sandBox[row + 1][col] === 0) {
                         newSandBox[row + 1][col] = 1;
