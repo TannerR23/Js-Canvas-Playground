@@ -22,7 +22,7 @@ function onclickConwaysGame(){
     let canvas = createCanvas("conways-game")
     let context = getContext(canvas);
 
-    const conwaysGame = new ConwaysGame(container, canvas, context);
+    const conwaysGame = new ConwaysGame(canvas, context);
 
     let btnContainer = document.createElement("div");
     btnContainer.className = "btn-container";
@@ -63,13 +63,20 @@ function onclickFallingSand(){
     container.appendChild(title);
 
     //Canvas setup
-    let canvas = document.createElement("canvas");
-    canvas.id = "sand-simulation-canvas"
-    canvas.width = container.getBoundingClientRect().width;
-    canvas.height = 500;
-    container.appendChild(canvas);
+    let canvas = createCanvas("sand-simulation-canvas");
+    let context = getContext(canvas);
 
-    fallingSandInitialisation();
+    const fallingSandSim = new FallingSandSimulation(canvas, context);
+
+    let btnContainer = document.createElement("div");
+    btnContainer.className = "btn-container";
+    let clearBtn = document.createElement("button");
+    clearBtn.innerText = "Clear";
+    clearBtn.onclick = fallingSandSim.initialiseSand.bind(fallingSandSim);
+    btnContainer.appendChild(clearBtn);
+    container.appendChild(btnContainer);
+
+    fallingSandSim.initialiseSand();
 }
 
 /*
