@@ -6,10 +6,42 @@ var simulationInterval;
 var cellSize = 10;
 var tickRate = 25;
 var generations = 0;
+var isCanvasMouseDown = false;
+var cellToggleMode = null;
 
 function resetGame(){
     isSimulating = false;
     generations = 0;
+}
+
+/*
+*   Toggles the cell's state during mouse actions
+*/
+function toggleCellOnMouseEvent(event) {
+    //Check we are still holding the mouse down
+    if (event.type === "mousedown") {
+        isCanvasMouseDown = true;
+    }
+    if (!isCanvasMouseDown) return;
+
+    // Get mouse position and calculate cell coordinates
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    const col = Math.floor((mouseX * (canvas.width / rect.width)) / cellSize);
+    const row = Math.floor((mouseY * (canvas.height / rect.height)) / cellSize);
+
+    // Determine the initial toggle mode on the first interaction
+    if (cellToggleMode === null) {
+        cellToggleMode = currGeneration[row][col] === 1 ? 0 : 1;
+    }
+
+    // Toggle cell only if it differs from toggleMode and re-draw
+    if (currGeneration[row][col] !== cellToggleMode) {
+        currGeneration[row][col] = cellToggleMode;
+        drawGrid();
+    }
 }
 
 /*
@@ -19,6 +51,20 @@ function resetGame(){
 function initialisation(){
     canvas = document.getElementById("conways-game");
     context = canvas.getContext("2d");
+
+    /* event listeners on canvas for mouse down and move to toggle cells */
+    canvas.addEventListener("mousedown", toggleCellOnMouseEvent);
+    canvas.addEventListener("mousemove", toggleCellOnMouseEvent);
+
+    /* event listeners on canvas for mouse up or leave to stop toggling cells and reset the toggle mode */
+    canvas.addEventListener("mouseup", () => {
+        isCanvasMouseDown = false;
+        cellToggleMode = null;
+    });
+    canvas.addEventListener("mouseleave", () => {
+        isCanvasMouseDown = false;
+        cellToggleMode = null;
+    });
 
     randomConwayGame();
 }

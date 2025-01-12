@@ -50,6 +50,10 @@ canvas{
     border: 1px solid black;
 }
 
+#conways-game{
+    cursor: pointer;
+}
+
 button{
     text-align: center;
     font-size: 14px;
