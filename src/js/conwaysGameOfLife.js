@@ -1,6 +1,5 @@
 class ConwaysGame{
-    constructor(container, canvas, context){
-        this.container = container;
+    constructor(canvas, context){
         this.canvas = canvas;
         this.context = context;
         this.isSimulating = false;
@@ -47,8 +46,8 @@ class ConwaysGame{
         const mouseX = event.clientX - rect.left;
         const mouseY = event.clientY - rect.top;
     
-        const col = Math.floor((mouseX * (canvas.width / rect.width)) / this.cellSize);
-        const row = Math.floor((mouseY * (canvas.height / rect.height)) / this.cellSize);
+        const col = Math.floor((mouseX * (this.canvas.width / rect.width)) / this.cellSize);
+        const row = Math.floor((mouseY * (this.canvas.height / rect.height)) / this.cellSize);
     
         // Determine the initial toggle mode on the first interaction
         if (this.cellToggleMode === null) {
