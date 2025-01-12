@@ -42,7 +42,7 @@ function onclickConwaysGame(){
     stopBtn.onclick = stopConwaysGame;
     let stepThroughBtn = document.createElement("button");
     stepThroughBtn.innerText = "Step Through";
-    stepThroughBtn.onclick = stepThroughConwaysGame;
+    stepThroughBtn.onclick = calcNextGeneration;
 
     btnContainer.appendChild(clearBtn);
     btnContainer.appendChild(randomGameBtn);

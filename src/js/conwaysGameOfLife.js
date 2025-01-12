@@ -159,12 +159,8 @@ function countNeighbours(row, col){
 }
 
 /* 
-    Function to set flag to stop the simulation
+*   Function to set flag to stop the simulation
 */
 function stopConwaysGame(){
     isSimulating = false;
-}
-
-function stepThroughConwaysGame(){
-    console.log("Clearing conways game");
 }
