@@ -9,10 +9,13 @@ var generations = 0;
 
 function resetGame(){
     isSimulating = false;
-    currGeneration = [];
     generations = 0;
 }
 
+/*
+*   Function to initialise the canvas and context to be used throughout
+*   Then call to generate a random game
+*/
 function initialisation(){
     canvas = document.getElementById("conways-game");
     context = canvas.getContext("2d");
@@ -20,8 +23,10 @@ function initialisation(){
     randomConwayGame();
 }
 
+/*
+*   Function to draw the grid using the 2d generation array
+*/
 function drawGrid(){
-    console.log("Drawing")
     context.clearRect(0,0, canvas.width, canvas.height);
     context.strokeStyle = "black";
     context.fillStyle = "black";
@@ -33,6 +38,7 @@ function drawGrid(){
 
             context.strokeRect(x, y, cellSize, cellSize);
 
+            //If the current cell is a 1, fill in the cell
             if(currGeneration[row][col] === 1){
                 context.fillRect(x, y, cellSize, cellSize);
             }
@@ -40,17 +46,25 @@ function drawGrid(){
     }
 }
 
+/*
+*   Function to clear the grid of all 'alive' cells
+*/
 function clearConwaysGame(){
-    console.log("Clearing conways game");
+    resetGame();
+
+    for (var row = 0; row < currGeneration.length; row++) {
+        for (var col = 0; col < currGeneration[row].length; col++) {
+            currGeneration[row][col] = 0;
+        }
+    }
+
+    drawGrid();
 }
 
 function randomConwayGame(){
     resetGame();
+    currGeneration = [];
 
-    console.log(canvas.height)
-    console.log(canvas.height / cellSize)
-    console.log(canvas.width)
-    console.log(canvas.width / cellSize)
     for (let row = 0; row < canvas.height / cellSize; row++) {
         let currRow = [];
         for (let col = 0; col < canvas.width / cellSize; col++) {
@@ -58,8 +72,6 @@ function randomConwayGame(){
         }
         currGeneration.push(currRow);
     }
-
-    console.table(currGeneration)
 
     drawGrid();
 }
