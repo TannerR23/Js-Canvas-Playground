@@ -88,7 +88,7 @@ function onclickMazeGeneration(){
     container.appendChild(title);
 
     //Canvas setup
-    let canvas = createCanvas("sand-simulation-canvas", 500, 500);
+    let canvas = createCanvas("maze-gen", 500, 500);
     let context = getContext(canvas);
 
     const mazeGen = new MazeGeneration(canvas, context);
@@ -97,7 +97,7 @@ function onclickMazeGeneration(){
     btnContainer.className = "btn-container";
     let newMazeBtn = document.createElement("button");
     newMazeBtn.innerText = "New Maze";
-    // newMazeBtn.onclick =
+    newMazeBtn.onclick = mazeGen.generateMaze.bind(mazeGen);
     let solveBtn = document.createElement("button");
     solveBtn.innerText = "Solve";
     // solveBtn.onclick =
@@ -105,8 +105,7 @@ function onclickMazeGeneration(){
     btnContainer.appendChild(solveBtn);
     container.appendChild(btnContainer);
 
-    mazeGen.initialiseGrid();
-    mazeGen.drawGrid();
+    mazeGen.generateMaze();
 }
 
 /*
