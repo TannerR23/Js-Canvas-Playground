@@ -4,7 +4,7 @@ class MazeGeneration{
         this.context = context;
         this.maze = [];
         this.mazeBlock = 20;
-        this.tickRate = 50;
+        this.tickRate = 1;
         this.startPos = [0,0];
         this.stack = [];
         this.currCell;
@@ -17,6 +17,7 @@ class MazeGeneration{
     */
     initialiseGrid(){
         this.maze = [];
+        this.lastCell = undefined;
 
         for (let row = 0; row < this.canvas.height / this.mazeBlock; row++) {
             let currRow = [];
@@ -92,10 +93,12 @@ class MazeGeneration{
     
         // Recursive loop for maze generation
         const step = () => {
+            //Loop through while there are items in the stack
             if (this.stack.length > 0) {
                 this.currCell = this.stack.pop();
                 let neighbours = this.getNeighbours(this.currCell);
     
+                //Check if we have any neighbours we can move to
                 if (neighbours.length > 0) {
                     this.stack.push(this.currCell);
                     let randomNeighbourIndex = Math.floor(Math.random() * neighbours.length);
