@@ -131,6 +131,11 @@ class FallingSandSimulation {
         this.drawGrid();
     }
 
+    updateCell(cell) {
+        this.context.fillStyle = cell.colour;
+        this.context.fillRect(cell.x, cell.y, this.sandSize, this.sandSize);
+    }
+
     addSand(event) {
         this.isSimulating = true;
 
@@ -155,12 +160,12 @@ class FallingSandSimulation {
                 const c = col + j;
 
                 if (r >= 0 && r < this.sandBox.length && c >= 0 && c < this.sandBox[r].length) {
-                    this.sandBox[r][c] = new Cell(r, c, 1, `hsl(${this.hue}, 100%, 50%)`);
+                    let newSand = new Cell(r, c, 1, `hsl(${this.hue}, 100%, 50%)`)
+                    this.sandBox[r][c] = newSand;
+                    this.updateCell(newSand)
                 }
             }
         }
-
-        this.drawGrid();
 
         // Start simulation if it's not already running
         if (!this.simulationInterval) {
