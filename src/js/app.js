@@ -79,6 +79,36 @@ function onclickFallingSand(){
     fallingSandSim.initialiseSand();
 }
 
+function onclickMazeGeneration(){
+    clearPage();
+
+    //title setup
+    let title = document.createElement("h1");
+    title.innerHTML = "Maze Generation / Solver";
+    container.appendChild(title);
+
+    //Canvas setup
+    let canvas = createCanvas("sand-simulation-canvas", 500, 500);
+    let context = getContext(canvas);
+
+    const mazeGen = new MazeGeneration(canvas, context);
+
+    let btnContainer = document.createElement("div");
+    btnContainer.className = "btn-container";
+    let newMazeBtn = document.createElement("button");
+    newMazeBtn.innerText = "New Maze";
+    // newMazeBtn.onclick =
+    let solveBtn = document.createElement("button");
+    solveBtn.innerText = "Solve";
+    // solveBtn.onclick =
+    btnContainer.appendChild(newMazeBtn);
+    btnContainer.appendChild(solveBtn);
+    container.appendChild(btnContainer);
+
+    mazeGen.initialiseGrid();
+    mazeGen.drawGrid();
+}
+
 /*
 *   Function to create a canvas given optional arguments of classname, width and height
 */
