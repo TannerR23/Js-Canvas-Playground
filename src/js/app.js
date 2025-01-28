@@ -63,7 +63,7 @@ function onclickFallingSand(){
     container.appendChild(title);
 
     //Canvas setup
-    let canvas = createCanvas("sand-simulation-canvas", 1500, 600);
+    let canvas = createCanvas("sand-simulation-canvas");
     let context = getContext(canvas);
 
     const fallingSandSim = new FallingSandSimulation(canvas, context);
