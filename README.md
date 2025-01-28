@@ -7,3 +7,4 @@ Project involves just raw JavaScript, HTML and CSS.
 ### Implemented
 - Conway's Game of Life
 - Falling Sand Simulation
+- Maze generation & solver
