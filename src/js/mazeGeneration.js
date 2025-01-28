@@ -3,12 +3,13 @@ class MazeGeneration{
         this.canvas = canvas;
         this.context = context;
         this.maze = [];
-        this.mazeBlock = 20;
-        this.tickRate = 1;
+        this.mazeBlock = 25;
+        this.tickRate = 10;
         this.startPos = [0,0];
         this.stack = [];
         this.currCell;
-        this.lastCell;
+        this.end;
+        this.start;
         this.isAnimating = true;
     }
 
@@ -17,7 +18,7 @@ class MazeGeneration{
     */
     initialiseGrid(){
         this.maze = [];
-        this.lastCell = undefined;
+        this.end = undefined;
 
         for (let row = 0; row < this.canvas.height / this.mazeBlock; row++) {
             let currRow = [];
@@ -26,6 +27,8 @@ class MazeGeneration{
             }
             this.maze.push(currRow);
         }
+
+        this.start = this.maze[this.startPos[0]][this.startPos[1]];
     }
 
     /*
@@ -62,18 +65,18 @@ class MazeGeneration{
     
                 // Highlight the current cell
                 if (currBlock === this.currCell && this.isAnimating) {
-                    this.context.fillStyle = "rgba(100, 100, 100, 0.25)";
+                    this.context.fillStyle = "rgba(100, 100, 100, 0.5)";
                     this.context.fillRect(x, y, this.mazeBlock, this.mazeBlock);
                 }
     
                 // Highlight the last cell (farthest)
-                if (this.lastCell && currBlock.row === this.lastCell.row && currBlock.col === this.lastCell.col) {
+                if (currBlock === this.end) {
                     this.context.fillStyle = "rgba(0, 255, 0, 0.5)";
                     this.context.fillRect(x, y, this.mazeBlock, this.mazeBlock);
                 }
 
                 // Start pos highlight
-                if (currBlock === this.maze[this.startPos[0]][this.startPos[1]]) {
+                if (currBlock === this.start) {
                     this.context.fillStyle = "rgba(0, 100, 0, 0.5)";
                     this.context.fillRect(x, y, this.mazeBlock, this.mazeBlock);
                 }
@@ -113,7 +116,7 @@ class MazeGeneration{
                 setTimeout(step, this.tickRate);
             } else {
                 console.log("Maze generation complete!");
-                this.lastCell = this.findFarthestCell();
+                this.end = this.findFarthestCell();
                 this.isAnimating = false;
                 this.drawGrid(); 
             }
@@ -122,9 +125,34 @@ class MazeGeneration{
         step();
     }
 
+    //Instant Generation
+    // generateMaze(){
+    //     this.initialiseGrid();
+
+    //     this.currCell = this.maze[this.startPos[0]][this.startPos[1]];
+    //     this.currCell.visited = true;
+    //     this.stack.push(this.currCell);
+        
+    //     while(this.stack.length > 0){
+    //         this.currCell = this.stack.pop();
+    //         let neighbours = this.getNeighbours(this.currCell);
+    //         if(neighbours.length > 0){
+    //             this.stack.push(this.currCell);
+    //             let randomNeighbourIndex = Math.floor(Math.random() * neighbours.length);
+    //             this.removeWall(this.currCell, neighbours[randomNeighbourIndex]);
+    //             this.currCell = neighbours[randomNeighbourIndex];
+    //             this.currCell.visited = true;
+    //             this.stack.push(this.currCell);
+    //         }
+    //     }
+
+    //     this.end = this.findFarthestCell();
+    //     this.drawGrid();
+    // }
+
     findFarthestCell() {
         // Queue for BFS: stores { cell, distance from start }
-        let queue = [{ cell: this.maze[this.startPos[0]][this.startPos[1]], distance: 0 }];
+        let queue = [{ cell: this.start, distance: 0 }];
         let visited = new Set(); // Track visited cells
         let farthestCell = queue[0];
     
@@ -155,24 +183,24 @@ class MazeGeneration{
     
     // Helper method to find connected (reachable) neighbors of a cell
     getConnectedNeighbours(block) {
-        let neighbours = [];
         // Top
         if (!block.walls[0] && block.row - 1 >= 0) {
-            neighbours.push(this.maze[block.row - 1][block.col]);
+            block.neighbours.push(this.maze[block.row - 1][block.col]);
         }
         // Right
         if (!block.walls[1] && block.col + 1 < this.maze[block.row].length) {
-            neighbours.push(this.maze[block.row][block.col + 1]);
+            block.neighbours.push(this.maze[block.row][block.col + 1]);
         }
         // Bottom
         if (!block.walls[2] && block.row + 1 < this.maze.length) {
-            neighbours.push(this.maze[block.row + 1][block.col]);
+            block.neighbours.push(this.maze[block.row + 1][block.col]);
         }
         // Left
         if (!block.walls[3] && block.col - 1 >= 0) {
-            neighbours.push(this.maze[block.row][block.col - 1]);
+            block.neighbours.push(this.maze[block.row][block.col - 1]);
         }
-        return neighbours;
+
+        return block.neighbours;
     }
 
     removeWall(block1, block2){
@@ -217,6 +245,11 @@ class MazeGeneration{
         }
         return neighbours;
     }
+
+    onclickSolveMaze(){
+        let mazeSolver = new MazeSolver(this.canvas, this.context, this);
+        mazeSolver.AStarAlgorithm();
+    }
 }
 
 //Class to keep track of which walls are visible or not
@@ -225,6 +258,7 @@ class Block{
         this.row = row;
         this.col = col;
         this.visited = false;
-        this.walls = [true, true, true, true] //Top, right, bottom, left
+        this.walls = [true, true, true, true]; //Top, right, bottom, left
+        this.neighbours = [];
     }   
 }

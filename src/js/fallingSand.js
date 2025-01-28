@@ -3,9 +3,9 @@ class FallingSandSimulation {
         this.isSimulating = false;
         this.canvas = canvas;
         this.context = context;
-        this.sandSize = 10;
+        this.sandSize = 5;
         this.tickRate = 25;
-        this.brushSize = 5;
+        this.brushSize = 10;
         this.hue = 0;
         this.gradientColors = ["red", "orange", "yellow", "pink"];
         this.sandBox = [];
@@ -49,11 +49,10 @@ class FallingSandSimulation {
                 const x = col * this.sandSize;
                 const y = row * this.sandSize;
 
-                this.context.strokeRect(x, y, this.sandSize, this.sandSize);
+                // this.context.strokeRect(x, y, this.sandSize, this.sandSize);
 
                 if (currCell.state === 1) {
                     this.context.fillStyle = currCell.colour;
-                    console.log(currCell.colour)
                     this.context.fillRect(x, y, this.sandSize, this.sandSize);
                 }
             }

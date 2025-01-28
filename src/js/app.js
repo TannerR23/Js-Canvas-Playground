@@ -63,7 +63,7 @@ function onclickFallingSand(){
     container.appendChild(title);
 
     //Canvas setup
-    let canvas = createCanvas("sand-simulation-canvas");
+    let canvas = createCanvas("sand-simulation-canvas", 1500, 600);
     let context = getContext(canvas);
 
     const fallingSandSim = new FallingSandSimulation(canvas, context);
@@ -88,7 +88,7 @@ function onclickMazeGeneration(){
     container.appendChild(title);
 
     //Canvas setup
-    let canvas = createCanvas("maze-gen", 500, 500);
+    let canvas = createCanvas("maze-gen", 1000, 500);
     let context = getContext(canvas);
 
     const mazeGen = new MazeGeneration(canvas, context);
@@ -100,7 +100,7 @@ function onclickMazeGeneration(){
     newMazeBtn.onclick = mazeGen.generateMaze.bind(mazeGen);
     let solveBtn = document.createElement("button");
     solveBtn.innerText = "Solve";
-    // solveBtn.onclick =
+    solveBtn.onclick = mazeGen.onclickSolveMaze.bind(mazeGen);
     btnContainer.appendChild(newMazeBtn);
     btnContainer.appendChild(solveBtn);
     container.appendChild(btnContainer);
